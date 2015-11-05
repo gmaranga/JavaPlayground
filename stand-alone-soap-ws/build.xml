@@ -1,0 +1,29 @@
+<project name="IntegrationTest" default="soapui-tests" basedir=".">
+    <description>Runs the soapUI integration tests</description>
+    <property file="build.properties"/>
+
+	<!--This testrunner files are part of SoapUI distribution -->
+    <target name="checkos">
+        <condition property="testrunner.cmd" value="${soapUI.home}\bin\testrunner.bat">
+                <os family="windows" />
+        </condition>
+        <condition property="testrunner.cmd" value="${soapUI.home}/bin/testrunner.sh">
+                <os family="unix" />
+        </condition>
+    </target>
+
+    <target name="soapui-tests" depends="checkos">
+    
+    	<echo message="${testrunner.cmd}"/>
+    	<echo message="${soapui.project.folder}"/>
+       <!-- Execute soapui testrunner. Parameters information at http://www.soapui.org/test-automation/running-functional-tests.html -->
+    	<exec executable="${testrunner.cmd}"
+              failonerror="true"
+              failifexecutionfails="true">
+        	<arg value="-e ${service.endpoint}"/> <!-- Optional usefull if you want to override the service endpoint defined in the soapUI project -->
+        	<arg value="-raf"/> <!-- Optional turns report generation on -->
+        	<arg value="${report.dir}"/> <!-- Reports folder -->
+            <arg value="${soapui.project.folder}"/> <!-- SoapUI project location -->
+        </exec>
+    </target>
+</project>
