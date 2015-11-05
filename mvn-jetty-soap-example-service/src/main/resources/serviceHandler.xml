@@ -1,0 +1,8 @@
+<handler-chains xmlns="http://java.sun.com/xml/ns/javaee">
+	<handler-chain>
+		<handler>
+			<handler-name>com.wsexample.handler.WriteResponseToConsoleHandler</handler-name>
+			<handler-class>com.wsexample.handler.WriteResponseToConsoleHandler</handler-class>
+		</handler>
+	</handler-chain>
+</handler-chains>
