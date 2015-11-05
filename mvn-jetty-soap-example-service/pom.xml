@@ -7,7 +7,7 @@
 	<packaging>war</packaging>
 
 	<properties>
-		<jdk.version>1.6</jdk.version>
+		<jdk.version>1.8</jdk.version>
 	</properties>
 
 	<dependencies>
@@ -32,9 +32,9 @@
 			<!-- This will generate all the Artifacts for the WS to work. Including 
 				JAX-B classes and WSDL -->
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
+				<groupId>org.jvnet.jax-ws-commons</groupId>
 				<artifactId>jaxws-maven-plugin</artifactId>
-				<version>1.12</version>
+				<version>2.2</version>
 				<executions>
 					<execution>
 						<phase>process-classes</phase>
@@ -60,12 +60,9 @@
 				</configuration>
 			</plugin>
 		</plugins>
-
-
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -76,13 +73,13 @@
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>
-											org.codehaus.mojo
+											org.jvnet.jax-ws-commons
 										</groupId>
 										<artifactId>
 											jaxws-maven-plugin
 										</artifactId>
 										<versionRange>
-											[1.10,)
+											[2.2,)
 										</versionRange>
 										<goals>
 											<goal>wsgen</goal>
