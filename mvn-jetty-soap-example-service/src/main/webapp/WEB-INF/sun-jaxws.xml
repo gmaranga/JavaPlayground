@@ -2,5 +2,7 @@
 <endpoints version="2.0"
 	xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime">
 	<endpoint implementation="com.wsexample.sib.RandImpl" name="RandService"
-		url-pattern="/*" />
+		url-pattern="/rand" />
+	<endpoint implementation="com.wsexample.sib.ImageServiceImpl" name="ImageService"
+	url-pattern="/image" enable-mtom="true"/>
 </endpoints>

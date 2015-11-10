@@ -6,26 +6,26 @@
       <xsd:import namespace="http://sei.wsexample.com/" schemaLocation="RandService_schema1.xsd"/>
     </xsd:schema>
   </types>
-  <message name="nextN">
-    <part name="parameters" element="tns:nextN"/>
-  </message>
-  <message name="nextNResponse">
-    <part name="parameters" element="tns:nextNResponse"/>
-  </message>
   <message name="next1">
     <part name="parameters" element="tns:next1"/>
   </message>
   <message name="next1Response">
     <part name="parameters" element="tns:next1Response"/>
   </message>
+  <message name="nextN">
+    <part name="parameters" element="tns:nextN"/>
+  </message>
+  <message name="nextNResponse">
+    <part name="parameters" element="tns:nextNResponse"/>
+  </message>
   <portType name="RandService">
-    <operation name="nextN">
-      <input ns1:Action="http://sei.wsexample.com/RandService/nextNRequest" message="tns:nextN" xmlns:ns1="http://www.w3.org/2007/05/addressing/metadata"/>
-      <output ns2:Action="http://sei.wsexample.com/RandService/nextNResponse" message="tns:nextNResponse" xmlns:ns2="http://www.w3.org/2007/05/addressing/metadata"/>
-    </operation>
     <operation name="next1">
-      <input ns3:Action="http://sei.wsexample.com/RandService/next1Request" message="tns:next1" xmlns:ns3="http://www.w3.org/2007/05/addressing/metadata"/>
-      <output ns4:Action="http://sei.wsexample.com/RandService/next1Response" message="tns:next1Response" xmlns:ns4="http://www.w3.org/2007/05/addressing/metadata"/>
+      <input ns1:Action="http://sei.wsexample.com/RandService/next1Request" message="tns:next1" xmlns:ns1="http://www.w3.org/2007/05/addressing/metadata"/>
+      <output ns2:Action="http://sei.wsexample.com/RandService/next1Response" message="tns:next1Response" xmlns:ns2="http://www.w3.org/2007/05/addressing/metadata"/>
+    </operation>
+    <operation name="nextN">
+      <input ns3:Action="http://sei.wsexample.com/RandService/nextNRequest" message="tns:nextN" xmlns:ns3="http://www.w3.org/2007/05/addressing/metadata"/>
+      <output ns4:Action="http://sei.wsexample.com/RandService/nextNResponse" message="tns:nextNResponse" xmlns:ns4="http://www.w3.org/2007/05/addressing/metadata"/>
     </operation>
   </portType>
 </definitions>
