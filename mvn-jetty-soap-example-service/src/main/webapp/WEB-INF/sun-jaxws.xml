@@ -5,4 +5,6 @@
 		url-pattern="/rand" />
 	<endpoint implementation="com.wsexample.sib.ImageServiceImpl" name="ImageService"
 	url-pattern="/image" enable-mtom="true"/>
+	<endpoint implementation="com.wsexample.sib.EchoServiceImpl" name="EchoService"
+	url-pattern="/echo" />
 </endpoints>

@@ -1,36 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xs:schema version="1.0" targetNamespace="http://sei.wsexample.com/" xmlns:tns="http://sei.wsexample.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <xs:element name="downloadImage" type="tns:downloadImage"/>
+  <xs:element name="arg0" nillable="true" type="xs:anyType"/>
 
-  <xs:element name="downloadImageResponse" type="tns:downloadImageResponse"/>
-
-  <xs:element name="uploadImage" type="tns:uploadImage"/>
-
-  <xs:element name="uploadImageResponse" type="tns:uploadImageResponse"/>
-
-  <xs:complexType name="uploadImage">
-    <xs:sequence>
-      <xs:element name="arg0" type="xs:base64Binary" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="uploadImageResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="downloadImage">
-    <xs:sequence>
-      <xs:element name="arg0" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="downloadImageResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:base64Binary" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
+  <xs:element name="return" nillable="true" type="xs:anyType"/>
 </xs:schema>
 

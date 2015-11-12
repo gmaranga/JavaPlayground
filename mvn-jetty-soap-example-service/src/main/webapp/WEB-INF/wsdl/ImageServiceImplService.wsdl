@@ -7,23 +7,23 @@
   </wsp:Policy>
   <binding name="ImageServiceImplPortBinding" type="ns2:ImageService" xmlns:ns2="http://sei.wsexample.com/">
     <wsp:PolicyReference URI="#ImageServiceImplPortBinding_MTOM_Policy"/>
-    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc"/>
     <operation name="uploadImage">
       <soap:operation soapAction=""/>
       <input>
-        <soap:body use="literal"/>
+        <soap:body use="literal" namespace="http://sei.wsexample.com/"/>
       </input>
       <output>
-        <soap:body use="literal"/>
+        <soap:body use="literal" namespace="http://sei.wsexample.com/"/>
       </output>
     </operation>
     <operation name="downloadImage">
       <soap:operation soapAction=""/>
       <input>
-        <soap:body use="literal"/>
+        <soap:body use="literal" namespace="http://sei.wsexample.com/"/>
       </input>
       <output>
-        <soap:body use="literal"/>
+        <soap:body use="literal" namespace="http://sei.wsexample.com/"/>
       </output>
     </operation>
   </binding>
