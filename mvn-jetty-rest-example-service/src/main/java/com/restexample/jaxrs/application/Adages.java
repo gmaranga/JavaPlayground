@@ -8,6 +8,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.namespace.QName;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -67,6 +68,7 @@ public class Adages {
 
 	
 	// Java Adage --> XML document
+	@XmlElementDecl(namespace = "http://com.restexamples", name = "adage")
 	private JAXBElement<Adage> toXml(Adage adage) {
 		return new JAXBElement<Adage>(new QName("adage"), Adage.class, adage);
 	}
