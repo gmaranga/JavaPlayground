@@ -1,5 +1,9 @@
 package com.restexample.jaxrs.prediction;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -13,7 +17,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/")
+import org.codehaus.jackson.map.ObjectMapper;
+
+@Path("/predictions")
 public class PredictionsRS {
 
 	@Context
@@ -122,28 +128,70 @@ public class PredictionsRS {
 		return Response.ok(msg, "text/plain").build();
 	}
 	
+
+
+	private void populate() {
+		plist = new PredictionsList();
+		String filename = "/WEB-INF/data/predictions.db";
+		InputStream in  = sctx.getResourceAsStream(filename);
+		//Read the data into the array of Predictions
+		if(in != null){
+			try{
+				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+				String record = null;
+				while((record = reader.readLine()) != null){
+					String[] parts = record.split("!");
+					addPrediction(parts[0], parts[1]);
+					
+				}
+			}catch(Exception e){
+				throw new RuntimeException("I/O failed", e);
+			}
+		}
+	}
+
 	private int addPrediction(String who, String what) {
-		// TODO Auto-generated method stub
-		return 0;
+		int id = plist.add(who, what);
+		return id;
 	}
-
-	private Response toRequestedType(int id, String string) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private Object toJson(PredictionsList plist2) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	private void checkContext() {
 		if(plist == null) populate();
 	}
 
-	private void populate() {
-		// TODO Auto-generated method stub
-		
+	//PredictionList --> JSON document
+	private String toJson(PredictionsList plist2) {
+
+		String json = "If you see this, there's a problem.";
+		try{
+			json = new ObjectMapper().writeValueAsString(plist);
+		}catch(Exception e){e.printStackTrace();}
+		return json;
 	}
+	
+	//Prediction --> JSON document
+		private String toJson(Prediction pred) {
+
+			String json = "If you see this, there's a problem.";
+			try{
+				json = new ObjectMapper().writeValueAsString(pred);
+			}catch(Exception e){e.printStackTrace();}
+			return json;
+		}
+
+	//Generate an HTTP error response or type OK response
+	private Response toRequestedType(int id, String type) {
+		
+		Prediction pred = plist.find(id);
+		if(pred == null){
+			String msg = id + " is a bad ID.\n";
+			return Response.status(Response.Status.BAD_REQUEST).entity(msg).type(MediaType.TEXT_PLAIN).build();
+		}else if(type.contains("json")){
+			return Response.ok(toJson(pred), type).build();
+		}else{
+			return Response.ok(pred, type).build();
+		}
+	}
+	
 
 }
