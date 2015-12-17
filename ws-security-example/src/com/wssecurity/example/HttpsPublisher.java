@@ -63,14 +63,15 @@ public class HttpsPublisher {
 		try{
 			InetSocketAddress inet = new InetSocketAddress(port);
 			server = HttpsServer.create(inet, backlog);
-			SSLContext sslCtx = SSLContext.getInstance("TLS");
+			SSLContext sslCtx = SSLContext.getInstance("TLS");//is the central data structure, and this context supports
+			//secure (that is, TLS-based) communications from clients to the HttpsPublisher
 			//Password for keystore
 			char[] password = "qubits".toCharArray();
 			KeyStore ks = KeyStore.getInstance("JKS");
 			FileInputStream fis = new FileInputStream(keystore);
-			ks.load(fis, password);
+			ks.load(fis, password);//the contents of the keystore file, test.keystore, are loaded into memory
 			KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-			kmf.init(ks, password);
+			kmf.init(ks, password);//KeyManagerFactory is initialized with the contents of this keystore file
 			TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
 			tmf.init(ks);//same as keystore
 			sslCtx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
@@ -78,12 +79,14 @@ public class HttpsPublisher {
 			final SSLEngine eng = sslCtx.createSSLEngine();
 			server.setHttpsConfigurator(new HttpsConfigurator(sslCtx){
 				public void configure(HttpsParameters parms){
-					parms.setCipherSuites(eng.getEnabledCipherSuites());
+					parms.setCipherSuites(eng.getEnabledCipherSuites());//setting cipher suites that are used during 
+																		//the handshake negotiation
 					parms.setProtocols(eng.getEnabledProtocols());
 				}
 			});
-			server.setExecutor(null);//use default, hence single-threaded
-			server.createContext(uri, new MyHttpsHandler(this.serviceInstance));
+			server.setExecutor(null);//use default, hence single-threaded use non null value for multi-thread
+			server.createContext(uri, new MyHttpsHandler(this.serviceInstance));//handler to handle requests against 
+																				//the URI
 			
 		}catch(Exception e){throw new RuntimeException(e);}
 		
