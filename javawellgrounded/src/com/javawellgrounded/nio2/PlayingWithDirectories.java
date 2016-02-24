@@ -13,7 +13,7 @@ public class PlayingWithDirectories {
 
 	public static void main(String[] args) {
 
-//		listFiles(".exe");
+		listFiles(".exe");
 		listFilesRecursively(".exe");
 		
 	}
