@@ -227,6 +227,7 @@ public class PlayingWithFileSystem {
 					for (WatchEvent<?> event : key.pollEvents()) {
 						if (event.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
 							System.out.println(">>>>Dir has changed!");
+							System.out.println(event.context());
 						}
 					}
 					key.reset();
