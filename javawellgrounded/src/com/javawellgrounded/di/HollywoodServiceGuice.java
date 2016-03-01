@@ -3,11 +3,19 @@ package com.javawellgrounded.di;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HollywoodServiceFactoryDI {
+import javax.inject.Inject;
 
-//	@Inject
-	public static List<Agent> getFriendlyAgents(AgentFinder finder){
-		
+public class HollywoodServiceGuice {
+
+	private AgentFinder finder = null;
+
+	@Inject
+	public HollywoodServiceGuice(AgentFinder finder) {
+		this.finder = finder;
+	}
+
+	public List<Agent> getFriendlyAgents() {
+
 		List<Agent> agents = finder.findAllAgents();
 		List<Agent> javaFriendlyAgents = filterAgents(agents, "Java Developers");
 		return javaFriendlyAgents;
@@ -17,12 +25,12 @@ public class HollywoodServiceFactoryDI {
 
 		List<Agent> filteredAgetns = new ArrayList<>();
 		for (Agent agent : agents) {
-			if(agent.getType().equals(agentType)){
+			if (agent.getType().equals(agentType)) {
 				filteredAgetns.add(agent);
 			}
 		}
-		
+
 		return filteredAgetns;
 	}
-	
+
 }
