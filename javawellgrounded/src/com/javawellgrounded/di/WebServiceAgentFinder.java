@@ -3,6 +3,9 @@ package com.javawellgrounded.di;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Singleton;
+//Mark the dependency as singleton
+//@Singleton
 public class WebServiceAgentFinder implements AgentFinder {
 
 	@Override
