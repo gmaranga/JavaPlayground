@@ -9,4 +9,5 @@ public class WorkUnit<T> {
 	}
 	
 	public T getWork(){ return this.workUnit; }
+	public void setWork(T workUnit){ this.workUnit = workUnit; }
 }
