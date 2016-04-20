@@ -16,7 +16,7 @@ public class PrimeNumberGenerator implements Runnable {
 		Integer nextPrime = -1;
 		
 		// loop through the numbers one by one
-		for (int i = currentPrime; i < Integer.MAX_VALUE; i++) {
+		for (int i = currentPrime+1; i < Integer.MAX_VALUE; i++) {
 
 			boolean isPrimeNumber = true;
 
@@ -46,10 +46,10 @@ public class PrimeNumberGenerator implements Runnable {
 			Integer currentPrimeNumber = this.generateNextPrimeNumber(wu.getWork());
 			wu.setWork(currentPrimeNumber);
 			abq.offer(wu);
-			System.out.println("New prime number generated: " + currentPrimeNumber);
+			System.out.println("[PNG] New prime number generated: " + currentPrimeNumber);
 		}else{
-			System.out.println("Initializing prime number generator: ");
-			System.out.println("Current prime number: 1");
+			System.out.println("[PNG] Initializing prime number generator: ");
+			System.out.println("[PNG] Current prime number: 1");
 			wu = new WorkUnit<Integer>(1);
 			abq.offer(wu);
 		}
