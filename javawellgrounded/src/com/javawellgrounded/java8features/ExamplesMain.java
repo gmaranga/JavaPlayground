@@ -1,12 +1,31 @@
 package com.javawellgrounded.java8features;
 
+import java.time.Clock;
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.Formatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -176,6 +195,117 @@ public class ExamplesMain {
 		//The result is an Optional holding the reduced value.
 		Optional<String> reduced = stringCollection.stream().sorted().reduce((s1, s2) -> s1 + "#" + s2);
 		reduced.ifPresent(System.out::println);
+		
+		//-- Parallel Streams vs sequential Streams
+		//Operations on sequential streams are performed on a single thread while operations on parallel streams
+		//are performed concurrent on multiple threads.
+		int max = 1000000;
+		List<String> values = new ArrayList<>();
+		for(int i = 0; i < max; i++){
+			UUID uuid = UUID.randomUUID();
+			values.add(uuid.toString());
+		}
+		long t0 = System.nanoTime();
+		long count = values.stream().sorted().count();
+		long t1 = System.nanoTime();
+		long millis = TimeUnit.NANOSECONDS.toMillis(t1 - t0);
+		System.out.println(String.format("Sequential sort took: %d ms. Total count: %d", millis, count));
+		
+		t0 = System.nanoTime();
+		count = values.parallelStream().sorted().count();
+		t1 = System.nanoTime();
+		millis = TimeUnit.NANOSECONDS.toMillis(t1 - t0);
+		System.out.println(String.format("Parallel sort took: %d ms. Total count: %d", millis, count));
+		
+		//--Map new methods/features
+		Map<Integer, String> map = new HashMap<>();
+		for (int i = 0; i < 10; i++) {
+			map.putIfAbsent(i, "val" + i);
+		}
+		System.out.println("Map forEach:");
+		map.forEach((id, val) -> System.out.println(val));
+		
+		map.computeIfPresent(3,(key, val) -> val + key);
+		System.out.println("computeIfPresent: "+ map.get(3));
+		map.computeIfPresent(9, (key, value)-> null);
+		System.out.println("containsKey: "+ map.containsKey(9));
+		map.computeIfAbsent(23, (key)-> "val" + key);
+		System.out.println("containsKey: "+ map.containsKey(23));
+		//Remove entries for a a given key, only if it's currently mapped to a given value
+		map.remove(3, "val33");
+		System.out.println("Get after conditional removing: "+ map.get(3));
+		System.out.println("Get with default value: "+ map.getOrDefault(42, "not found"));
+		//Merging entries
+		//Merge either put the key/value into the map if no entry for the key exists, or the merging function will be called to change the existing value.
+		map.merge(9, "val9", (value, newValue)-> value.concat(newValue));
+		System.out.println("Get with merge: " + map.get(9));
+		map.merge(9, "concat", (value, newValue)-> value.concat(newValue));
+		System.out.println("Get with merge 2: " + map.get(9));
+		map.merge(9, "concat2", (value, newValue)-> value.concat(newValue));
+		
+		//--Date API
+		//The new Date API is comparable with the Joda-Time library, however it's not the same.
+		 //Clocks are aware of a timezone and may be used instead of System.currentTimeMillis() to retrieve the current milliseconds. 
+		//Such an instantaneous point on the time-line is also represented by the class Instant. Instants can be used to create legacy java.util.Date objects.
+		Clock clock = Clock.systemDefaultZone();
+		millis = clock.millis();
+		System.out.println("Clock current millis: " + millis);
+		Instant instant = clock.instant();
+		Date legacyNow = Date.from(instant);
+		System.out.println("Legacy date from Instant: " + legacyNow);
+		//Timezones.
+		//Timezones are represented by a ZoneId. Timezones are represented by a ZoneId
+		System.out.println("Timezones:");
+		System.out.println(ZoneId.getAvailableZoneIds());
+		ZoneId zone1 = ZoneId.of("US/Central");
+		ZoneId zone2 = ZoneId.of("America/Argentina/Buenos_Aires");
+		System.out.println(zone1.getRules());
+		System.out.println(zone2.getRules());
+		//LocalTime represents a time without a timezone
+		LocalTime now1 = LocalTime.now(zone1);
+		LocalTime now2 = LocalTime.now(zone2);
+		System.out.println("now1 is before now2: " + now1.isBefore(now2));
+		long hoursBetween = ChronoUnit.HOURS.between(now1, now2);
+		long minutesBetween = ChronoUnit.MINUTES.between(now1, now2);
+		System.out.println("Time diference in hours: " + hoursBetween);
+		System.out.println("Time diference in minutes: " + minutesBetween);
+		//LocalTime comes with various factory method to simplify the creation of new instances, including parsing of time strings.
+		LocalTime late = LocalTime.of(23, 59, 59);
+		DateTimeFormatter germanFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(Locale.GERMAN);
+		LocalTime leetTime = LocalTime.parse("13:37", germanFormatter);
+		System.out.println("Formatted time: " + leetTime);
+		//LocalDate
+		//LocalDate represents a distinct date, e.g. 2014-03-11. It's immutable and works exactly analog to LocalTime.
+		//Keep in mind that each manipulation returns a new instance.
+		LocalDate today = LocalDate.now();
+		LocalDate tomorrow = today.plus(1, ChronoUnit.DAYS);
+		LocalDate yesterday = tomorrow.minusDays(2);
+		LocalDate independenceDay = LocalDate.of(1816, Month.JULY, 9); 
+		System.out.println("Today: " + today);
+		System.out.println("Tomorrow: " + tomorrow);
+		System.out.println("Yesterday: " + yesterday);
+		System.out.println("Argentina independence day: " + independenceDay);
+		DateTimeFormatter usFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
+		LocalDate xmas = LocalDate.parse("24.12.2016", usFormatter);
+		System.out.println("Xmas: "  + xmas);
+		//LocalDateTime. Represent a date-time. Works similar to LocalTime and LocalDate.
+		LocalDateTime eoy = LocalDateTime.of(2016, Month.DECEMBER, 31, 23, 59, 59);
+		DayOfWeek dayOfWeek = eoy.getDayOfWeek();
+		System.out.println("eoy dow: " + dayOfWeek);
+		Month month = eoy.getMonth();
+		System.out.println("eoy month: " + dayOfWeek);
+		long minuteOfDay = eoy.getLong(ChronoField.MINUTE_OF_DAY);
+		System.out.println("eoy min of the day: " + minuteOfDay);
+		//With the additional information of a timezone it can be converted to an instant.
+		//Instants can easily be converted to legacy dates of type java.util.Date.
+		instant = eoy.atZone(ZoneId.systemDefault()).toInstant();
+		Date legacyDate = Date.from(instant);
+		System.out.println("eoy to date: " + legacyDate);
+		//Formatting date-times works just like formatting dates or times. Instead of using pre-defined formats we can create formatters from custom patterns.
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy - HH:mm");//Unlike java.text.NumberFormat the new DateTimeFormatter is immutable and thread-safe.
+		LocalDateTime parsed = LocalDateTime.parse("Nov 03, 2016 - 15:29", formatter);
+		String parsedDate = formatter.format(parsed);
+		System.out.println("Custom parsed date: "+ parsedDate);
 	}
 	
 	void testScopes(){
