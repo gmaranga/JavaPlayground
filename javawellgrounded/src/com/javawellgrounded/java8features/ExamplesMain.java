@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -293,7 +292,7 @@ public class ExamplesMain {
 		DayOfWeek dayOfWeek = eoy.getDayOfWeek();
 		System.out.println("eoy dow: " + dayOfWeek);
 		Month month = eoy.getMonth();
-		System.out.println("eoy month: " + dayOfWeek);
+		System.out.println("eoy month: " + month);
 		long minuteOfDay = eoy.getLong(ChronoField.MINUTE_OF_DAY);
 		System.out.println("eoy min of the day: " + minuteOfDay);
 		//With the additional information of a timezone it can be converted to an instant.
