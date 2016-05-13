@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.security.KeyStore;
 
-import javax.management.RuntimeErrorException;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
