@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+	http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd">
+
+	<!-- stdin-channeladapter 
+	 that wraps the Java Standard Input stream; taking text entered into the Standard 
+	 Input stream and putting a text a message into the associated channel -->
+	
+	<int-stream:stdin-channel-adapter id="producer" channel="messageChannel"/>
+
+	<!--Poller that is used by the stdin-channel-adapter to determine how often 
+		to check the Standard Input stream for text (in this case, it checks every 
+		200 milliseconds). --> 
+	
+	<int:poller id="defaultPoller" default="true" max-messages-per-poll="5" fixed-rate="200"/>
+
+	<!-- A couple of stdout-channel-adapters that wrap the Java Standard Outputstream. 
+		They take the messages from the associated channel and display it to the 
+		Console. -->
+	
+	<int-stream:stdout-channel-adapter id="consumer1" channel="messageChannel" append-newline="true"/>
+	<int-stream:stdout-channel-adapter id="consumer2" channel="messageChannel" append-newline="true"/>
+
+	<!-- Subscribable channels do not buffer or hold onto messages. They simply 
+		deliver them to all the subscribers – that is the adapters on the consuming 
+		end of the channel. Subscribers deliver the messages to all subscribers. 
+		In this case, you have two subscribers – the two stdout-channel-adapters -->
+		
+<!-- 		<int:publish-subscribe-channel id="messageChannel"/> -->
+
+	<!-- Pollable channels, can buffer messages and deliver the message to a 
+		single subscriber. If there are more than one subscribers, it picks the first 
+		subscriber and skips the others. -->
+		
+		<int:channel id="messageChannel">
+	<!-- Direct channels are the default channel type in SI. It is a subscribable 
+		channel but it acts more like a point-to-point channel (like a pollable channel). 
+		In other words, it will send its message to a single subscriber (like a pollable 
+		channel). To do this just needs to remove the queue comfig from the channel-->
+			<int:queue capacity="2" />
+		</int:channel>
+</beans>
