@@ -37,17 +37,25 @@
 	<int:poller id="defaultPoller" default="true"
 		max-messages-per-poll="5" fixed-rate="200" />
 
-	<int-file:file-to-string-transformer id="file-2-string.transformer" input-channel="inboundChannel" output-channel="xml-inboundChannel" charset="UTF-8"/>
+	<int-file:file-to-string-transformer
+		id="file-2-string.transformer" input-channel="inboundChannel"
+		output-channel="xml-inboundChannel" charset="UTF-8" />
 	<!-- This is not the filter itself, but is the expression component that 
 		defines the XPath expression that the filter will use to filter. In this 
 		case, the expression says you are looking for a <country> element in the 
 		message that contains the content of “USA”. -->
-	<int-xml:xpath-expression id="filterXpathExp" expression="//country='USA'" />
+	<int-xml:xpath-expression id="filterXpathExp"
+		expression="//country='USA'" />
 
 	<!-- A SI XPath filter that takes a message from the XML inbound channel, 
 		uses the XPath expression component above to filter the XML messages and 
 		puts accepted messages in the outbound channel -->
-	<int-xml:xpath-filter id="xpathFilter" input-channel="xml-inboundChannel" match-type="exact" output-channel="outboundChannel" xpath-expression-ref="filterXpathExp"/>
-	
+	<!-- <int-xml:xpath-filter id="xpathFilter" input-channel="xml-inboundChannel" 
+		match-type="exact" output-channel="outboundChannel" xpath-expression-ref="filterXpathExp"/> -->
+
+	<!-- A validating filter to accept only those XML shiporder messages that 
+		comply with the schema -->
+	<int-xml:validating-filter id="validation-filter" input-channel="xml-inboundChannel" output-channel="outboundChannel" schema-location="/META-INF/shiporder.xsd" />	
+
 </beans>
 
