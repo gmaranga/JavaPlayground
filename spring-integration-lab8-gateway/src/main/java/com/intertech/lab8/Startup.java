@@ -12,11 +12,11 @@ public class Startup {
 	public static void main(String[] args) throws InterruptedException, ExecutionException, TimeoutException {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
 				"/META-INF/spring/si-components.xml");
-		//Syn impl
+		//Sync impl
 //		MessageChannel channel = context.getBean("requestChannel", MessageChannel.class);
 //		Message<String> message = MessageBuilder.withPayload("Hello brave new world").build();
 //		channel.send(message);
-		//Asyn impl
+		//Async impl
 		PigLatinService service = context.getBean("latinService", PigLatinService.class);
 		Future<String> future = service.translate("Hello brave new world");
 		String serviceOutput = future.get(5000, TimeUnit.SECONDS);
