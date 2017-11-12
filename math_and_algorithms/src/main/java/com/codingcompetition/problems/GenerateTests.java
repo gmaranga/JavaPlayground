@@ -25,13 +25,31 @@ public class GenerateTests {
 	
 	public static void main(String[] args) throws IOException{
 		
+		long start = System.currentTimeMillis();
+		
 		try(Scanner in = newInput(); PrintWriter out = newOutput()){
 			int k = in.nextInt();
+			long numberWithMaxDivs = 2;
+			long maxDivs = 0;
 			
 			for(int i = 2; i <= k; i++){
-				System.out.println("divs for: " + i + " =  " + countDivisors(i));
+				
+				if(i % 6 != 0) continue; 
+				long divs = countDivisors(i);
+				if(divs > maxDivs){
+					maxDivs = divs;
+					numberWithMaxDivs = i;
+				}
 			}
+			
+			out.println(k - numberWithMaxDivs + 1);
+			long end = System.currentTimeMillis();
+			out.println((end-start)*1000);
+			out.println(numberWithMaxDivs);
+			out.println(maxDivs);
 		}
+		
+		
 	}
 	
 	private static int countDivisors(int i){
@@ -39,7 +57,7 @@ public class GenerateTests {
 		
 		for(int j = 1; j <= Math.sqrt(i); j++){
 			if (i % j == 0){
-				count += 2;
+				count +=(j==i/j)?1:2;
 			}
 		}
 		return count;
